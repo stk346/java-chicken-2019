@@ -15,6 +15,22 @@ public class Table {
         selectedMenus.add(selectedMenu);
     }
 
+    public boolean isMenuExists(int menuNumber) {
+        boolean flag = false;
+        for (int idx = 0; idx < selectedMenus.size(); idx++) {
+            flag =  selectedMenus.get(idx).getMenuNumber() == menuNumber + 1;
+        }
+        return flag;
+    }
+
+    public void addCount(int menuNumber, int count) {
+        for (SelectedMenu selectedMenu : selectedMenus) {
+            if (selectedMenu.getMenuNumber() == menuNumber + 1) {
+                selectedMenu.addCount(count);
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return Integer.toString(number);

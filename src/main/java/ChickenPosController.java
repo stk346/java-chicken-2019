@@ -2,6 +2,7 @@ import domain.*;
 import view.InputView;
 import view.OutputView;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +15,18 @@ public class ChickenPosController {
     }
 
     public void run() {
-        boolean keepOrder = false;
+        int mainDisplaySelector = 0;
         OutputView.showMainDisplay();
-        int firstUserInput = getInputAndCheckOrderMenu();
-        if (firstUserInput == 0) keepOrder = true;
-        while (keepOrder) {
+        mainDisplaySelector = getInputAndCheckOrderMenu();
+        while (mainDisplaySelector == 3) {
             int tableNumber = showTablesAndReturnNumber();
             showMenus();
             order(tableNumber);
             OutputView.showMainDisplay();
-            if (InputView.InputMainDisplayNumber() != 0) {
-                keepOrder = false;
+            mainDisplaySelector = InputView.InputMainDisplayNumber();
+            if (mainDisplaySelector == 2) {
+                int tableNumberForPay = showTablesAndReturnNumber();
+                PayingMachine payingMachine = new PayingMachine(tables.get(tableNumberForPay));
             }
         }
     }
@@ -45,9 +47,23 @@ public class ChickenPosController {
     private void order(int tableNumber) {
         int inputOrderNumber = InputView.InputOrderNumber();
         int inputMenuCount = InputView.InputMenuCount();
+        try {
+            addMenu(tableNumber, inputOrderNumber, inputMenuCount);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            order(tableNumber);
+        }
+    }
+
+    private void addMenu(int tableNumber, int inputOrderNumber, int inputMenuCount) {
         Menu selectedMenu = MenuRepository.getMenu(inputOrderNumber);
 
-        tables.get(tableNumber-1).addMenu(new SelectedMenu(selectedMenu, inputMenuCount));
+        if (tables.get(tableNumber).isMenuExists(inputOrderNumber)) {
+            tables.get(tableNumber).addCount(inputOrderNumber, inputMenuCount);
+        }
+        if (!tables.get(tableNumber).isMenuExists(inputOrderNumber)) {
+            tables.get(tableNumber).addMenu(new SelectedMenu(selectedMenu, inputMenuCount));
+        }
     }
 
     private void showMenus() {
