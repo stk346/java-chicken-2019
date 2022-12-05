@@ -22,7 +22,12 @@ public class MenuRepository {
         return Collections.unmodifiableList(menus);
     }
 
-    public static Menu getMenu(int idx) {
-        return menus.get(idx);
+    public static Menu getMenu(int userInput) throws IllegalArgumentException {
+        for (Menu menu : menus()) {
+            if (menu.getNumber() == userInput) {
+                return menu;
+            }
+        }
+        throw new IllegalArgumentException("올바른 메뉴 넘버를 입력해주세요.");
     }
 }

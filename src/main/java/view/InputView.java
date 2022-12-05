@@ -31,7 +31,7 @@ public class InputView {
         System.out.println("## 등록할 메뉴를 선택하세요.");
         String uerInput = scanner.nextLine();
         try {
-            return Integer.parseInt(uerInput)-1;
+            return Integer.parseInt(uerInput);
         } catch (IllegalArgumentException e) {
             System.out.println("숫자만 입력해주세요.");
             return InputOrderNumber();
