@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.security.jgss.GSSUtil;
 import domain.Menu;
 import domain.Table;
 
@@ -35,6 +36,14 @@ public class OutputView {
         for (final Table table : tables) {
             System.out.printf(TABLE_FORMAT, table);
         }
+        System.out.println();
+    }
+
+    public static void showMainDisplay() {
+        System.out.println("## 메인화면");
+        System.out.println("1 - 주문등록");
+        System.out.println("2 - 결제하기");
+        System.out.println("3 - 프로그램 종료");
         System.out.println();
     }
 }
