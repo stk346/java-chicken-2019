@@ -10,9 +10,6 @@ public class SelectedMenu {
         validateCount();
     }
 
-    public int getMenuNumber() {
-        return menu.getNumber();
-    }
 
     public void addCount(int count) throws IllegalArgumentException{
         validateCount(count);
@@ -29,5 +26,25 @@ public class SelectedMenu {
         if (menuCount > 99) {
             throw new IllegalArgumentException("한 메뉴의 최대 수량은 99개입니다.");
         }
+    }
+
+    public int getMenuNumber() {
+        return menu.getNumber();
+    }
+
+    public int getMenuCount() {
+        return menuCount;
+    }
+
+    public String getMenuName() {
+        return menu.getName();
+    }
+
+    public int getPrice() {
+        return menu.getPrice();
+    }
+
+    public Category getCategory() {
+        return menu.getCategory();
     }
 }

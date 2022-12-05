@@ -31,8 +31,16 @@ public class Table {
         }
     }
 
+    public List<SelectedMenu> getSelectedMenus() {
+        return selectedMenus;
+    }
+
     @Override
     public String toString() {
         return Integer.toString(number);
+    }
+
+    public int getNumber() {
+        return number;
     }
 }

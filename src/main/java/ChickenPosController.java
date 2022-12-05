@@ -2,7 +2,6 @@ import domain.*;
 import view.InputView;
 import view.OutputView;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class ChickenPosController {
         int mainDisplaySelector = 0;
         OutputView.showMainDisplay();
         mainDisplaySelector = getInputAndCheckOrderMenu();
-        while (mainDisplaySelector == 3) {
+        while (mainDisplaySelector == 1) {
             int tableNumber = showTablesAndReturnNumber();
             showMenus();
             order(tableNumber);
@@ -27,6 +26,10 @@ public class ChickenPosController {
             if (mainDisplaySelector == 2) {
                 int tableNumberForPay = showTablesAndReturnNumber();
                 PayingMachine payingMachine = new PayingMachine(tables.get(tableNumberForPay));
+                OutputView.showOrderDetails(payingMachine.getOrderDetails());
+                OutputView.showPayStartingMessage(payingMachine.getTableNumber());
+                int inputToPayCashOrCard = InputView.inputToPayCashOrCard();
+                OutputView.showPayingAmount(payingMachine.giveADiscount(inputToPayCashOrCard));
             }
         }
     }
@@ -34,7 +37,7 @@ public class ChickenPosController {
     private int getInputAndCheckOrderMenu() {
         try {
             int firstUserInput = InputView.InputMainDisplayNumber();
-            if (firstUserInput == 1) {
+            if (firstUserInput == 2) {
                 throw new IllegalArgumentException("먼저 메뉴를 등록해주세요.");
             }
             return firstUserInput;
