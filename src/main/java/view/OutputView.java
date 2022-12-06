@@ -2,6 +2,7 @@ package view;
 
 import com.sun.security.jgss.GSSUtil;
 import domain.Menu;
+import domain.SelectedMenu;
 import domain.Table;
 
 import java.util.List;
@@ -47,10 +48,6 @@ public class OutputView {
         System.out.println();
     }
 
-    public static void showOrderDetails(StringBuilder sb) {
-        System.out.println(sb);
-    }
-
     public static void showPayStartingMessage(int tableNumber) {
         System.out.println(tableNumber + "번 테이블의 결제를 진행합니다.");
     }
@@ -58,5 +55,16 @@ public class OutputView {
     public static void showPayingAmount(double giveADiscount) {
         System.out.println("## 최종 결제할 금액");
         System.out.println(giveADiscount + "원");
+    }
+
+    public static void showOrderDetails(Table table) {
+        System.out.println("## 주문 내역\n" + "메뉴 수량 금액");
+        StringBuilder sb = new StringBuilder();
+        for (SelectedMenu selectedMenu : table.getSelectedMenus()) {
+            sb.append(selectedMenu.getMenuName() + " " +
+                    selectedMenu.getMenuCount() + " " +
+                    selectedMenu.getPrice() + "\n");
+        }
+        System.out.println(sb);
     }
 }

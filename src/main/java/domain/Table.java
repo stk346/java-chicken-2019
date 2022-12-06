@@ -35,12 +35,12 @@ public class Table {
         return selectedMenus;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
     @Override
     public String toString() {
         return Integer.toString(number);
-    }
-
-    public int getNumber() {
-        return number;
     }
 }

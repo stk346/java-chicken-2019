@@ -30,6 +30,21 @@ public class Menu {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Menu menu = (Menu) o;
+
+        return getNumber() == menu.getNumber();
+    }
+
+    @Override
+    public int hashCode() {
+        return getNumber();
+    }
+
+    @Override
     public String toString() {
         return category + " " + number + " - " + name + " : " + price + "원";
     }

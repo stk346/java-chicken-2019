@@ -32,12 +32,8 @@ public class ChickenPosController {
     }
 
     private void throwDisplayException(int firstUserInput) {
-        if (firstUserInput == 2) {
-            throw new IllegalArgumentException("먼저 메뉴를 등록해주세요.");
-        }
-        if (firstUserInput < 1 || firstUserInput > 3) {
-            throw new IllegalArgumentException("1부터 3까지만 입력할 수 있습니다.");
-        }
+        validate(firstUserInput == 2, "먼저 메뉴를 등록해주세요.");
+        validate(firstUserInput < 1 || firstUserInput > 3, "1부터 3까지만 입력할 수 있습니다.");
     }
 
     private void orderAndCalculatePrice(int mainDisplaySelector) {
@@ -56,10 +52,33 @@ public class ChickenPosController {
         if (mainDisplaySelector == 2) {
             int tableNumberForPay = showTablesAndReturnNumber();
             PayingMachine payingMachine = new PayingMachine(tables.get(tableNumberForPay));
-            OutputView.showOrderDetails(payingMachine.getOrderDetails());
+            payingMachine.getOrderDetails();
             OutputView.showPayStartingMessage(payingMachine.getTableNumber());
             int inputToPayCashOrCard = InputView.inputToPayCashOrCard();
             OutputView.showPayingAmount(payingMachine.giveADiscount(inputToPayCashOrCard));
+        }
+    }
+
+    private int showTablesAndReturnNumber() {
+        final List<Table> tables = TableRepository.tables();
+        OutputView.printTables(tables);
+        return getTableNumber(tables);
+    }
+
+    private int getTableNumber(List<Table> tables) {
+        try {
+            final int tableNumber = InputView.inputTableNumber();
+            validate(tableNumber < 0 || tableNumber > tables.size(), "올바른 테이블 넘버를 입력해주세요.");
+            return tableNumber;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return showTablesAndReturnNumber();
+        }
+    }
+
+    private void validate(boolean tableNumber, String s) {
+        if (tableNumber) {
+            throw new IllegalArgumentException(s);
         }
     }
 
@@ -76,25 +95,17 @@ public class ChickenPosController {
 
     private void addMenu(int tableNumber, int inputOrderNumber, int inputMenuCount) throws IllegalArgumentException {
         Menu selectedMenu = MenuRepository.getMenu(inputOrderNumber);
+        Table targetTable = tables.get(tableNumber);
 
-        if (tables.get(tableNumber).isMenuExists(inputOrderNumber)) {
-            tables.get(tableNumber).addCount(inputOrderNumber, inputMenuCount);
+        if (targetTable.isMenuExists(inputOrderNumber)) {
+            targetTable.addCount(inputOrderNumber, inputMenuCount);
+            return;
         }
-        if (!tables.get(tableNumber).isMenuExists(inputOrderNumber)) {
-            tables.get(tableNumber).addMenu(new SelectedMenu(selectedMenu, inputMenuCount));
-        }
+        targetTable.addMenu(new SelectedMenu(selectedMenu, inputMenuCount));
     }
 
     private void showMenus() {
         final List<Menu> menus = MenuRepository.menus();
         OutputView.printMenus(menus);
-    }
-
-    private int showTablesAndReturnNumber() {
-        final List<Table> tables = TableRepository.tables();
-        OutputView.printTables(tables);
-
-        final int tableNumber = InputView.inputTableNumber();
-        return tableNumber;
     }
 }

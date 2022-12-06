@@ -1,5 +1,7 @@
 package domain;
 
+import view.OutputView;
+
 import java.util.List;
 
 public class PayingMachine {
@@ -37,15 +39,8 @@ public class PayingMachine {
         return sumPrice;
     }
 
-    public StringBuilder getOrderDetails() {
-        System.out.println("## 주문 내역\n" + "메뉴 수량 금액");
-        StringBuilder sb = new StringBuilder();
-        for (SelectedMenu selectedMenu : table.getSelectedMenus()) {
-            sb.append(selectedMenu.getMenuName() + " " +
-                    selectedMenu.getMenuCount() + " " +
-                    selectedMenu.getPrice() + "\n");
-        }
-        return sb;
+    public void getOrderDetails() {
+        OutputView.showOrderDetails(table);
     }
 
     public int getTableNumber() {
